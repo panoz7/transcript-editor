@@ -1,0 +1,21 @@
+<div>
+    <h3>Video</h3>
+    <input type='file' #videoFile (change)="handleVideoFile($event)" *ngIf="!videoBlob">
+    <video  #videoPlayer controls></video>
+</div>
+
+<div id='transcript-container'>
+    <h3>Transcript</h3>
+    <p *ngIf="activeEntry">{{activeEntry.speaker}}</p>
+
+
+    <input type='file' #transcriptFile (change)="handleTranscriptFile($event)" *ngIf="!transcript">
+    <table *ngIf="transcript">
+        <tr><th>Speaker</th><th>Text</th><th>Time</th></tr>
+        <tr *ngFor="let entry of transcript" [ngClass]="{'active': entry === activeEntry}" (click)="activeEntry = entry">
+            <td>{{entry.speaker}}</td>
+            <td>{{entry.text}}</td>
+            <td>{{entry.time}} <button (click)=setTime(entry) *ngIf="activeEntry === entry">set</button></td>
+        </tr>
+    </table>
+</div>

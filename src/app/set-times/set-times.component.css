@@ -1,0 +1,46 @@
+:host {
+    display: flex;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+:host div {
+    flex: .5;
+    flex-grow: 1 1 auto;
+    align-items: stretch;
+    box-sizing: border-box;
+    padding: 10px;
+    border: 1px solid black;
+}
+
+div#transcript-container {
+    overflow-y: scroll;
+}
+
+
+table {
+    border-collapse: collapse;
+    padding: 0;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+}
+
+table tr {
+    margin: 0;
+    padding: 0;
+}
+
+table tr.active {
+    background-color: yellow;
+}
+
+table tr td, table tr th {
+    border: 1px solid black;
+    padding: 5px;
+}
+
+video {
+    width: 100%;
+}
