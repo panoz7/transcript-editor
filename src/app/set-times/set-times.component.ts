@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-set-times',
@@ -12,7 +12,7 @@ export class SetTimesComponent implements OnInit {
   activeEntry;
   videoBlob;
 
-  constructor(private changeRef: ChangeDetectorRef) { }
+  constructor() { }
 
   ngOnInit(): void {
 
@@ -31,11 +31,7 @@ export class SetTimesComponent implements OnInit {
 
   handleVideoFile(e) {
     const file = e.target.files[0];
-
     this.videoBlob = URL.createObjectURL(file);
-
-    console.log(this.videoElement);
-
     this.videoElement.nativeElement.src = this.videoBlob;
   }
 
