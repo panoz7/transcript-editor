@@ -6,16 +6,16 @@
 
 <div id='transcript-container'>
     <h3>Transcript</h3>
-    <p *ngIf="activeEntry">{{activeEntry.speaker}}</p>
+    <button *ngIf="transcript" (click)="exportTranscript()">Export Transcript</button>
 
 
     <input type='file' #transcriptFile (change)="handleTranscriptFile($event)" *ngIf="!transcript">
     <table *ngIf="transcript">
         <tr><th>Speaker</th><th>Text</th><th>Time</th></tr>
-        <tr *ngFor="let entry of transcript" [ngClass]="{'active': entry === activeEntry}" (click)="activeEntry = entry">
+        <tr *ngFor="let entry of transcript" [ngClass]="{'active': entry === activeEntry}" (click)="setActiveEntry(entry)">
             <td>{{entry.speaker}}</td>
             <td>{{entry.text}}</td>
-            <td>{{entry.time}} <button (click)=setTime(entry) *ngIf="activeEntry === entry">set</button></td>
+            <td>{{entry.time}} <button (click)="setTime($event, entry)" *ngIf="activeEntry === entry">set</button></td>
         </tr>
     </table>
 </div>

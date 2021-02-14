@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-set-times',
@@ -7,7 +7,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 })
 export class SetTimesComponent implements OnInit {
 
-  @ViewChild('videoPlayer') videoElement; 
+  @ViewChild('videoPlayer') videoElement;
+  video;
   transcript; 
   activeEntry;
   videoBlob;
@@ -15,7 +16,6 @@ export class SetTimesComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-
   }
 
   handleTranscriptFile(e) {
@@ -35,14 +35,80 @@ export class SetTimesComponent implements OnInit {
     this.videoElement.nativeElement.src = this.videoBlob;
   }
 
-  setTime(entry) {
-    entry.time = this.videoElement.nativeElement.currentTime;
+  setTime(e, entry) {
+    e.stopPropagation();
+    entry.time = this.videoElement.nativeElement.currentTime - .25;
     this.selectNextEntry(entry);
   }
 
   selectNextEntry(currentEntry) {
     const currentKey = this.transcript.findIndex(entry => entry == currentEntry);
-    this.activeEntry = this.transcript[currentKey + 1];
+    this.setActiveEntry(this.transcript[currentKey + 1]);
+  }
+
+  selectPrevEntry(currentEntry) {
+    const currentKey = this.transcript.findIndex(entry => entry == currentEntry);
+    this.setActiveEntry(this.transcript[currentKey - 1]);
+  }
+
+  exportTranscript() {
+    this.downloadJson(this.transcript);
+  }
+
+  setActiveEntry(entry) {
+    this.activeEntry = entry;
+    if (entry.time) {
+      this.videoElement.nativeElement.currentTime = entry.time;
+    }
+  }
+
+  downloadJson(myJson){
+    var sJson = JSON.stringify(myJson);
+    var element = document.createElement('a');
+    element.setAttribute('href', "data:text/json;charset=UTF-8," + encodeURIComponent(sJson));
+    element.setAttribute('download', "transcript.json");
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click(); // simulate click
+    document.body.removeChild(element);
+  }
+
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    const video = this.videoElement.nativeElement;
+
+    if (event.key == ' ') {
+      if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    } 
+    
+    else if (event.key == 'ArrowDown') {
+      this.selectNextEntry(this.activeEntry);
+    } 
+    
+    else if (event.key == 'ArrowUp') {
+      this.selectPrevEntry(this.activeEntry);
+    }
+
+    else if (event.key == 's') {
+      this.setTime(event, this.activeEntry);
+    }
+
+    else if (event.key == 'ArrowLeft') {
+      video.currentTime = video.currentTime - 5; 
+    }
+
+    else if (event.key == 'ArrowRight') {
+      video.currentTime = video.currentTime + 5; 
+    }
+
+    else {
+      console.log(event.key)
+    }
+
   }
 
 }

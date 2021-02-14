@@ -1,0 +1,8 @@
+<input type='file' (change)="handleTranscriptFile($event)" *ngIf="!transcript">
+
+<div *ngIf="transcript">
+        <p *ngFor="let entry of transcript">
+            <a href='#'>{{entry.time}}</a><br/>
+            <b>{{entry.speaker}}</b>: {{entry.text}}
+        </p>
+</div>
